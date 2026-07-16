@@ -1,0 +1,79 @@
+<idea-plugin>
+    <id>com.jialiangh.readbook</id>
+    <name>ReadBook 状态栏读小说</name>
+    <version>1.0.4</version>
+    <vendor url="https://github.com/jialiangh/readbook">jialiangh</vendor>
+
+    <description><![CDATA[
+        在 JetBrains 全家桶（IDEA / Android Studio / PyCharm / WebStorm ...）底部状态栏读小说，边写代码边摸鱼。<br/>
+        参考 VSCode 扩展 <b>readbook</b> 移植。<br/><br/>
+        <ul>
+            <li>小说文字显示在底部状态栏，按段落切分（默认 50 字/段）</li>
+            <li>点击状态栏自动播放 / 暂停，右键弹出全部操作菜单</li>
+            <li>单键翻页（默认 E 下一段 / Q 上一段），P 跳指定段，O 模糊匹配跳转，W 退出，R 开始</li>
+            <li>单键只在焦点不在编辑器时生效，正常打字不受干扰</li>
+            <li>退出/翻页自动记住位置，下次接着上次读</li>
+        </ul>
+    ]]></description>
+
+    <!-- 只依赖平台模块，兼容所有基于 IntelliJ 的 IDE -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.jialiangh.readbook.ReadBookSettings"/>
+        <applicationService serviceImplementation="com.jialiangh.readbook.NovelReaderService"/>
+
+        <statusBarWidgetFactory
+            id="ReadBook.Widget"
+            implementation="com.jialiangh.readbook.ReadBookStatusBarWidgetFactory"
+            order="first"/>
+
+        <applicationConfigurable
+            instance="com.jialiangh.readbook.ReadBookConfigurable"
+            id="com.jialiangh.readbook.config"
+            displayName="阅读小说 (ReadBook)"
+            groupId="tools"/>
+
+        <postStartupActivity implementation="com.jialiangh.readbook.ReadBookStartupActivity"/>
+
+        <notificationGroup id="ReadBook Notifications" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="ReadBook.ActionGroup" text="阅读小说" description="ReadBook 操作" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+
+            <action id="ReadBook.Start"
+                    class="com.jialiangh.readbook.ReadBookStartAction"
+                    text="开始阅读 / 播放" description="开始自动播放（未加载时自动加载示例）"/>
+            <action id="ReadBook.Toggle"
+                    class="com.jialiangh.readbook.ReadBookToggleAction"
+                    text="暂停 / 继续" description="切换暂停/继续"/>
+            <action id="ReadBook.Next"
+                    class="com.jialiangh.readbook.ReadBookNextAction"
+                    text="下一段" description="翻到下一段"/>
+            <action id="ReadBook.Prev"
+                    class="com.jialiangh.readbook.ReadBookPrevAction"
+                    text="上一段" description="翻到上一段"/>
+            <action id="ReadBook.JumpToChunk"
+                    class="com.jialiangh.readbook.ReadBookJumpToChunkAction"
+                    text="跳转到指定段" description="跳转到设置里配置的段数"/>
+            <action id="ReadBook.JumpToText"
+                    class="com.jialiangh.readbook.ReadBookJumpToTextAction"
+                    text="模糊匹配跳转" description="按设置里的搜索文本模糊跳转"/>
+            <separator/>
+            <action id="ReadBook.OpenFile"
+                    class="com.jialiangh.readbook.ReadBookOpenFileAction"
+                    text="打开小说文件..." description="选择一个 .txt 小说文件"/>
+            <action id="ReadBook.LoadSample"
+                    class="com.jialiangh.readbook.ReadBookLoadSampleAction"
+                    text="加载内置示例" description="加载插件自带的示例小说"/>
+            <action id="ReadBook.Stop"
+                    class="com.jialiangh.readbook.ReadBookStopAction"
+                    text="停止阅读" description="退出阅读模式（记住位置）"/>
+            <action id="ReadBook.ClearRecent"
+                    class="com.jialiangh.readbook.ReadBookClearRecentAction"
+                    text="清除最近记录" description="下次启动不再自动加载"/>
+        </group>
+    </actions>
+</idea-plugin>
