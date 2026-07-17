@@ -20,7 +20,7 @@ class ReadBookSettings : PersistentStateComponent<ReadBookSettings.State> {
         /** 小说文件路径（.txt），为空则不自动加载 */
         var filePath: String = ""
         /** 自动播放速度（毫秒/字），越小越快 */
-        var speed: Int = 600
+        var speed: Int = 100
         /** 每段显示的字符数 */
         var chunkSize: Int = 50
         /** 底部文字字号 */

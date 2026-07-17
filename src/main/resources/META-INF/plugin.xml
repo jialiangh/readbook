@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.jialiangh.readbook</id>
     <name>ReadBook 状态栏读小说</name>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <vendor url="https://github.com/jialiangh/readbook">jialiangh</vendor>
 
     <description><![CDATA[
